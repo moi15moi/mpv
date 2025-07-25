@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <assert.h>
 #include <math.h>
 
@@ -163,6 +164,7 @@ static void draw_ass_rgba(unsigned char *src, int src_w, int src_h,
                           int src_stride, unsigned char *dst, size_t dst_stride,
                           int dst_x, int dst_y, uint32_t color)
 {
+    mp_err("draw_ass_rgba called\n");
     const unsigned int r = (color >> 24) & 0xff;
     const unsigned int g = (color >> 16) & 0xff;
     const unsigned int b = (color >>  8) & 0xff;
@@ -307,6 +309,7 @@ static void fill_padding_4(uint8_t *base, int w, int h, int stride, int padding)
 
 static bool pack_libass(struct mp_ass_packer *p, struct sub_bitmaps *res)
 {
+    mp_err("pack_libass called\n");
     if (!pack(p, res, IMGFMT_Y8))
         return false;
 
@@ -329,6 +332,7 @@ static bool pack_libass(struct mp_ass_packer *p, struct sub_bitmaps *res)
 
 static bool pack_rgba(struct mp_ass_packer *p, struct sub_bitmaps *res)
 {
+    mp_err("pack_rgba called\n");
     struct mp_rect bb_list[MP_SUB_BB_LIST_MAX];
     int num_bb = mp_get_sub_bb_list(res, bb_list, MP_SUB_BB_LIST_MAX);
 
@@ -393,6 +397,7 @@ void mp_ass_packer_pack(struct mp_ass_packer *p, ASS_Image **image_lists,
                         int num_image_lists, bool image_lists_changed, bool video_color_space,
                         int preferred_osd_format, struct sub_bitmaps *out)
 {
+    mp_err("mp_ass_packer_pack called\n");
     int format = preferred_osd_format == SUBBITMAP_BGRA ? SUBBITMAP_BGRA
                                                         : SUBBITMAP_LIBASS;
 
