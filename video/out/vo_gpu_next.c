@@ -301,6 +301,7 @@ static void update_overlays(struct vo *vo, struct mp_osd_res res,
                             struct osd_state *state, struct pl_frame *frame,
                             struct mp_image *src)
 {
+    printf("update_overlays\n");
     struct priv *p = vo->priv;
     double pts = src ? src->pts : 0;
     struct sub_bitmap_list *subs = osd_render(vo->osd, res, pts, flags, mp_draw_sub_formats);

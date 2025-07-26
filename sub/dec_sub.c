@@ -413,6 +413,7 @@ void sub_redecode_cached_packets(struct dec_sub *sub)
 struct sub_bitmaps *sub_get_bitmaps(struct dec_sub *sub, struct mp_osd_res dim,
                                     int format, double pts)
 {
+    printf("sub_get_bitmaps\n");
     mp_mutex_lock(&sub->lock);
 
     pts = pts_to_subtitle(sub, pts);
