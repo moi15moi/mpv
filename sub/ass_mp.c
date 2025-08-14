@@ -315,11 +315,13 @@ static bool pack_libass(struct mp_ass_packer *p, struct sub_bitmaps *res)
 
     int padding = p->packer->padding;
     uint8_t *base = res->packed->planes[0];
+    printf("base: %p\n", base);
     int stride = res->packed->stride[0];
 
     for (int n = 0; n < res->num_parts; n++) {
         struct sub_bitmap *b = &res->parts[n];
         void *pdata = base + b->src_y * stride + b->src_x;
+        printf("pdata pointer: %p\n", pdata);
         memcpy_pic(pdata, b->bitmap, b->w, b->h, stride, b->stride);
         fill_padding_1(pdata, b->w, b->h, stride, padding);
 
