@@ -328,6 +328,9 @@ static void update_overlays(struct vo *vo, struct mp_osd_res res,
             MP_ERR(vo, "Failed recreating OSD texture!\n");
             break;
         }
+
+        printf("item->packed_w: %i, item->packed_h: %i\n", item->packed_w, item->packed_h);
+
         ok = pl_tex_upload(p->gpu, &(struct pl_tex_transfer_params) {
             .tex        = entry->tex,
             .rc         = { .x1 = item->packed_w, .y1 = item->packed_h, },
