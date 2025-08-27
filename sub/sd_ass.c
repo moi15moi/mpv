@@ -775,6 +775,8 @@ static struct sub_bitmaps *get_bitmaps(struct sd *sd, struct mp_osd_res dim,
 
     if (no_ass)
         fill_plaintext(sd, pts);
+    
+    printf("get_bitmaps\n");
 
     int changed;
     ASS_Image *imgs = ass_render_frame(renderer, track, ts, &changed);

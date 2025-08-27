@@ -316,6 +316,7 @@ static struct sub_bitmaps *render_object(struct osd_state *osd,
                                          struct mp_osd_res osdres, double video_pts,
                                          const bool sub_formats[SUBBITMAP_COUNT])
 {
+    printf("render_object\n");
     int format = SUBBITMAP_LIBASS;
     if (!sub_formats[format] || osd->opts->force_rgba_osd)
         format = SUBBITMAP_BGRA;
@@ -362,6 +363,7 @@ struct sub_bitmap_list *osd_render(struct osd_state *osd, struct mp_osd_res res,
                                    double video_pts, int draw_flags,
                                    const bool formats[SUBBITMAP_COUNT])
 {
+    printf("osd_render\n");
     mp_mutex_lock(&osd->lock);
 
     int64_t start_time = mp_time_ns();

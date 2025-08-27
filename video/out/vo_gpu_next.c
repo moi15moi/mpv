@@ -301,6 +301,7 @@ static void update_overlays(struct vo *vo, struct mp_osd_res res,
                             struct osd_state *state, struct pl_frame *frame,
                             struct mp_image *src)
 {
+    printf("update_overlays\n");
     struct priv *p = vo->priv;
     double pts = src ? src->pts : 0;
     struct sub_bitmap_list *subs = osd_render(vo->osd, res, pts, flags, mp_draw_sub_formats);
@@ -327,6 +328,9 @@ static void update_overlays(struct vo *vo, struct mp_osd_res res,
             MP_ERR(vo, "Failed recreating OSD texture!\n");
             break;
         }
+
+        printf("item->packed_w: %i, item->packed_h: %i\n", item->packed_w, item->packed_h);
+
         ok = pl_tex_upload(p->gpu, &(struct pl_tex_transfer_params) {
             .tex        = entry->tex,
             .rc         = { .x1 = item->packed_w, .y1 = item->packed_h, },
@@ -1315,10 +1319,14 @@ static bool draw_frame(struct vo *vo, struct vo_frame *frame)
     }
 
     // Render frame
+    int64_t start_time = mp_time_ns();
+
     if (!pl_render_image_mix(p->rr, &mix, &target, &params)) {
         MP_ERR(vo, "Failed rendering frame!\n");
         goto done;
     }
+    double elapsed = MP_TIME_NS_TO_MS(mp_time_ns() - start_time);
+    MP_ERR(vo, "took %.3f ms!\n", elapsed);
 
     struct pl_frame ref_frame;
     pl_frames_infer_mix(p->rr, &mix, &target, &ref_frame);
