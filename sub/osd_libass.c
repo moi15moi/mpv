@@ -35,6 +35,7 @@ static const char osd_font_pfb[] =
 #include "sub/ass_mp.h"
 #include "sub/packer.h"
 #include "options/options.h"
+#include "osdep/timer.h"
 
 
 #define ASS_USE_OSD_FONT "{\\fnmpv-osd-symbols}"
@@ -674,7 +675,10 @@ static void append_ass(struct ass_state *ass, struct mp_osd_res *res,
     ass_set_pixel_aspect(ass->render, res->display_par);
 
     int ass_changed;
+    int64_t render_start = mp_time_ns();
     *img_list = ass_render_frame(ass->render, ass->track, 0, &ass_changed);
+    mp_dbg(ass->log, "1- ass_render_frame took %.3f ms (changed=%d)\n",
+           MP_TIME_NS_TO_MS(mp_time_ns() - render_start), ass_changed);
 
     ass->changed |= ass_changed;
 

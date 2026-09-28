@@ -30,6 +30,7 @@
 #include "options/m_config.h"
 #include "options/options.h"
 #include "options/path.h"
+#include "osdep/timer.h"
 #include "common/common.h"
 #include "common/msg.h"
 #include "demux/demux.h"
@@ -778,7 +779,10 @@ static struct sub_bitmaps *get_bitmaps(struct sd *sd, struct mp_osd_res dim,
         fill_plaintext(sd, pts);
 
     int changed;
+    int64_t render_start = mp_time_ns();
     ASS_Image *imgs = ass_render_frame(renderer, track, ts, &changed);
+    MP_DBG(sd, "2- ass_render_frame took %.3f ms (changed=%d)\n",
+           MP_TIME_NS_TO_MS(mp_time_ns() - render_start), changed);
     mp_sub_packer_pack_ass(ctx->packer, &imgs, 1, changed, !converted, format, res);
 
 done:
