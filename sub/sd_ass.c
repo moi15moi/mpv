@@ -783,7 +783,10 @@ static struct sub_bitmaps *get_bitmaps(struct sd *sd, struct mp_osd_res dim,
     ASS_Image *imgs = ass_render_frame(renderer, track, ts, &changed);
     MP_DBG(sd, "2- ass_render_frame(ts=%lld) took %.3f ms (changed=%d)\n",
            ts, MP_TIME_NS_TO_MS(mp_time_ns() - render_start), changed);
+    int64_t pack_start = mp_time_ns();
     mp_sub_packer_pack_ass(ctx->packer, &imgs, 1, changed, !converted, format, res);
+    MP_DBG(sd, "mp_sub_packer_pack_ass took %.3f ms (changed=%d)\n",
+           MP_TIME_NS_TO_MS(mp_time_ns() - pack_start), changed);
 
 done:
     // mangle_colors() modifies the color field, so copy the thing _before_.
