@@ -21,6 +21,7 @@
 
 #include "common/common.h"
 #include "common/msg.h"
+#include "osdep/timer.h"
 #include "video/csputils.h"
 #include "video/mp_image.h"
 #include "osd.h"
@@ -187,8 +188,12 @@ static void gen_osd_cb(void *pctx, struct sub_bitmaps *imgs)
 
     bool ok = true;
     if (imgs->change_id != osd->change_id) {
+        int64_t upload_start = mp_time_ns();
         if (!upload_osd(ctx, osd, imgs))
             ok = false;
+        MP_VERBOSE(ctx, "upload_osd took %.3f ms (%dx%d, texture %dx%d)\n",
+                   MP_TIME_NS_TO_MS(mp_time_ns() - upload_start),
+                   imgs->packed_w, imgs->packed_h, osd->w, osd->h);
 
         osd->change_id = imgs->change_id;
     }

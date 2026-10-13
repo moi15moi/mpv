@@ -347,6 +347,7 @@ struct mp_image *mppl_video_get_image(struct mppl_video *p, int imgfmt, int w, i
 static bool upload_overlay_tex(struct mppl_video *p, struct osd_entry *entry,
                                const struct sub_bitmaps *item)
 {
+    int64_t upload_start = mp_time_ns();
     pl_fmt tex_fmt = p->osd_fmt[item->format];
     if (!entry->tex)
         MP_TARRAY_POP(p->sub_tex, p->num_sub_tex, &entry->tex);
@@ -390,6 +391,9 @@ static bool upload_overlay_tex(struct mppl_video *p, struct osd_entry *entry,
         return false;
     }
     entry->change_id = item->change_id;
+    MP_VERBOSE(p, "upload_overlay_tex took %.3f ms (%dx%d, texture %dx%d)\n",
+               MP_TIME_NS_TO_MS(mp_time_ns() - upload_start),
+               item->packed_w, item->packed_h, entry->tex->params.w, entry->tex->params.h);
     return true;
 }
 
