@@ -325,6 +325,7 @@ static bool upload_overlay_tex(struct vo *vo, struct osd_entry *entry,
                                const struct sub_bitmaps *item)
 {
     struct priv *p = vo->priv;
+    int64_t upload_start = mp_time_ns();
     if (!entry->tex)
         MP_TARRAY_POP(p->sub_tex, p->num_sub_tex, &entry->tex);
     bool ok = pl_tex_recreate(p->gpu, &entry->tex, &(struct pl_tex_params) {
@@ -354,6 +355,9 @@ static bool upload_overlay_tex(struct vo *vo, struct osd_entry *entry,
         talloc_free(upload_params.priv);
         return false;
     }
+    MP_VERBOSE(vo, "upload_overlay_tex took %.3f ms (%dx%d, texture %dx%d)\n",
+               MP_TIME_NS_TO_MS(mp_time_ns() - upload_start),
+               item->packed_w, item->packed_h, entry->tex->params.w, entry->tex->params.h);
     return true;
 }
 
